@@ -1,17 +1,26 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.auth);
-
+  const navigate = useNavigate();
   const handleSignup = async (e) => {
     e.preventDefault();
-    await dispatch(signupUser({ email, password }));
-    alert("Signup successful! Please login.");
+    console.log({ email, password });
+
+    const result = await dispatch(signupUser({ email, password }));
+
+    if (result.meta.requestStatus === "fulfilled") {
+      alert("Signup successful! Please login.");
+      navigate("/");
+    } else {
+      alert(`Signup failed: ${result.payload}`);
+    }
   };
 
   return (
