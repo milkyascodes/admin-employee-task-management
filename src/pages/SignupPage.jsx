@@ -4,10 +4,14 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     console.log({ email, password });
-    // connect to Supabase signup here
+    // connect to Supabase signup
+    await supabase.auth.signUp({
+      email,
+      password,
+    });
   };
 
   return (
