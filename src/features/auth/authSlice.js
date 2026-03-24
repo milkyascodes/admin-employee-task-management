@@ -6,7 +6,7 @@ import supabase from "../../supabaseClient";
 export const signupUser = createAsyncThunk(
   "auth/signup",
   async ({ email, password }, thunkAPI) => {
-    const { data, error } = supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) return thunkAPI.rejectWithValue(error.message);
     return data.user;
   },
@@ -15,11 +15,16 @@ export const signupUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, thunkAPI) => {
-    const { data, error } = supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    if (error) return thunkAPI.rejectWithValue(error.message);
+    console.log("error is ", error);
+    if (error) {
+      console.log("thunk error", error.message);
+
+      return thunkAPI.rejectWithValue(error.message);
+    }
 
     const { data: profile } = await supabase
       .from("profiles")
@@ -68,6 +73,8 @@ const authSlice = createSlice({
         state.role = action.payload.role;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        console.log("failed", action.payload);
+
         state.loading = false;
         state.error = action.payload;
       })
