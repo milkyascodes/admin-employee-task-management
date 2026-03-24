@@ -2,6 +2,16 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import supabase from "../../supabaseClient";
 
 // functions
+
+export const signupUser = createAsyncThunk(
+  "auth/signup",
+  async ({ email, password }, thunkAPI) => {
+    const { data, error } = supabase.auth.signUp({ email, password });
+    if (error) return thunkAPI.rejectWithValue(error.message);
+    return data.user;
+  },
+);
+
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, thunkAPI) => {
@@ -36,6 +46,18 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(signupUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -49,7 +71,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(loginUser.rejected, (state) => {})
+
       .addCase(logoutUser.fulfilled, (state) => {
         ((state.user = null), (state.role = null));
       });
