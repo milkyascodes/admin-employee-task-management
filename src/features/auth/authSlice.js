@@ -1,4 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import supabase from "../../supabaseClient";
+export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
+  await supabase.auth.signOut();
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -9,7 +13,11 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      ((state.user = null), (state.role = null));
+    });
+  },
 });
 
-export const authReducer = authSlice.reducer;
+export default authSlice.reducer;
