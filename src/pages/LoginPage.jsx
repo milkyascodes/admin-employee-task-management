@@ -9,7 +9,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, role, error } = useSelector((state) => state.auth);
+  const { role, error } = useSelector((state) => state.auth);
 
   // login
   const handleLogin = async (e) => {
@@ -50,6 +50,16 @@ export default function Login() {
         >
           Login
         </button>
+
+        <p className="text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-blue-500 cursor-pointer"
+          >
+            Sign up
+          </span>
+        </p>
       </form>
     </div>
   );
