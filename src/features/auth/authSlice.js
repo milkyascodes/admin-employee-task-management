@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import supabase from "../../supabaseClient";
 import { data } from "autoprefixer";
 
@@ -81,13 +81,12 @@ export const getCurrentUser = createAsyncThunk(
     } = await supabase.auth.getSession();
 
     if (!session?.user) {
-      console.log("No user logged in");
-      return;
+      return null;
     }
 
     const user = session.user;
 
-    const { data: profile, error } = await supabase
+    const { data: profile } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", user.id)
@@ -99,6 +98,7 @@ export const getCurrentUser = createAsyncThunk(
     };
   },
 );
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -147,8 +147,15 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         ((state.user = null), (state.role = null));
       })
+      .addCase(getCurrentUser.pending, (state, action) => {
+        state.loading = true;
+      })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
-        if (action.payload) {
+        state.loading = false;
+        if (!action.payload) {
+          state.user = null;
+          state.role = null;
+        } else {
           state.user = action.payload.user;
           state.role = action.payload.role;
         }

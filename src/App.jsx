@@ -6,9 +6,10 @@ import AdminDashboard from "./pages/AdminPage";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCurrentUser } from "./features/auth/authSlice";
+import RouteGuard from "./components/RouteGuard";
 
 function App() {
-  const { role } = useSelector((state) => state.auth);
+  const { user, role } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -17,16 +18,32 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("user is", user);
+
     if (role === "admin") navigate("/admin");
     else if (role === "employee") navigate("/employee");
-  }, [role]);
+  }, [role, user]);
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/employee" element={<UserDashboard />} />
-      <Route path="/admin" element={<AdminDashboard />} />
+      <Route
+        path="/employee"
+        element={
+          <RouteGuard>
+            <UserDashboard />
+          </RouteGuard>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <RouteGuard>
+            <AdminDashboard />
+          </RouteGuard>
+        }
+      />
     </Routes>
   );
 }

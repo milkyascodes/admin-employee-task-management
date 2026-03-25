@@ -1,23 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+
+import AccountNavbar from "../components/AccountNavbar";
 
 function UserPage() {
   const { user, role } = useSelector((state) => state.auth);
-  // console.log("user", user, role);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const handleLogout = (e) => {
-    dispatch(logoutUser());
-    navigate("/");
-  };
 
   if (!user) return <p>Loading...</p>;
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen  bg-gray-100">
+      <AccountNavbar />
       <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md text-center">
-        <h2 className="text-2xl font-bold mb-4">Welcome</h2>
-
         <p className="mb-2">
           <span className="font-semibold">Email:</span> {user.email}
         </p>
