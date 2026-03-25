@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../features/users/userSlice";
 import AccountNavbar from "../components/AccountNavbar";
+import AssignTask from "../components/AssignTask";
 
 export default function AdminPage() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <AccountNavbar />
+      <AssignTask />
       <div className="">
         <h2 className="text-2xl font-bold mb-6">All Users</h2>
         <div className="bg-white shadow rounded-xl p-4">
