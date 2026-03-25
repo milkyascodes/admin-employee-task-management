@@ -18,8 +18,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("user is", user);
-
     if (role === "admin") navigate("/admin");
     else if (role === "employee") navigate("/employee");
   }, [role, user]);

@@ -14,7 +14,7 @@ export default function Login() {
   // login
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
+
     const result = await dispatch(loginUser({ email, password }));
     if (result.meta.requestStatus === "fulfilled") {
       const role = result.payload.role;

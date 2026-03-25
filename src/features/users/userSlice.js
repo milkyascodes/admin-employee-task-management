@@ -7,7 +7,6 @@ export const fetchUsers = createAsyncThunk(
   async (_, thunkAPI) => {
     const { data, error } = await supabase.from("profiles").select("*");
     if (error) return thunkAPI.rejectWithValue(error.message);
-    console.log("data of users", data);
 
     return data;
   },

@@ -55,10 +55,10 @@ export default function Signup() {
         <p className="text-sm text-center mt-4">
           Already have an account?{" "}
           <span
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
             className="text-green-500 cursor-pointer"
           >
-            Sign up
+            Login
           </span>
         </p>
       </form>
