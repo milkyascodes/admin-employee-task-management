@@ -53,7 +53,7 @@ const taskSlice = createSlice({
         state.loading = false;
         state.tasks.push(action.payload);
       })
-      .addCase(createTask.rejected, (state) => {
+      .addCase(createTask.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -64,7 +64,7 @@ const taskSlice = createSlice({
         state.loading = false;
         state.tasks = action.payload;
       })
-      .addCase(fetchTasks.rejected, (state) => {
+      .addCase(fetchTasks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
