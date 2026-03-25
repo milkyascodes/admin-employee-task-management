@@ -24,7 +24,10 @@ export default function AccountNavbar() {
             Dashboard
           </Link>
           <Link to="/admin/list" className=" hover:underline">
-            User List
+            Users
+          </Link>
+          <Link to="/admin/tasks" className=" hover:underline">
+            Tasks
           </Link>
           <Link to="/admin/create" className=" hover:underline">
             Create Task

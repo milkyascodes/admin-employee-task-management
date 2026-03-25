@@ -1,4 +1,9 @@
+import { useSelector } from "react-redux";
+
 export default function AdminStats() {
+  const { tasks } = useSelector((state) => state.tasks);
+  const { list: users, loading, error } = useSelector((state) => state.users);
+
   return (
     <div className="flex gap-6 w-full">
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
@@ -19,9 +24,9 @@ export default function AdminStats() {
         </div>
         <div>
           <p className="text-sm font-medium text-gray-500">Total Tasks</p>
-          <h3 className="text-2xl font-bold text-gray-800">1,284</h3>
+          <h3 className="text-2xl font-bold text-gray-800">{tasks.length}</h3>
           <p className="text-xs text-green-600 font-semibold">
-            +12% from last week
+            {/* +12% from last week */}
           </p>
         </div>
       </div>
@@ -44,33 +49,7 @@ export default function AdminStats() {
         </div>
         <div>
           <p className="text-sm font-medium text-gray-500">Total Users</p>
-          <h3 className="text-2xl font-bold text-gray-800">8,432</h3>
-          <p className="text-xs text-gray-400">Active now: 42</p>
-        </div>
-      </div>
-
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-        <div className="p-3 bg-amber-100 rounded-lg">
-          <svg
-            className="w-6 h-6 text-amber-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-            ></path>
-          </svg>
-        </div>
-        <div>
-          <p className="text-sm font-medium text-gray-500">Admins</p>
-          <h3 className="text-2xl font-bold text-gray-800">14</h3>
-          <p className="text-xs text-amber-700 font-medium">
-            3 Pending Approval
-          </p>
+          <h3 className="text-2xl font-bold text-gray-800">{users.length}</h3>
         </div>
       </div>
     </div>

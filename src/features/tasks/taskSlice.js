@@ -4,16 +4,19 @@ import supabase from "../../supabaseClient";
 export const createTask = createAsyncThunk(
   "tasks/createTask",
   async ({ title, description, assigned_to }, thunkAPI) => {
-    console.log("assigned to 2", assigned_to);
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    const { data, error } = await supabase.from("tasks").insert({
-      title,
-      description,
-      assigned_to,
-      created_by: session.user.id,
-    });
+    const { data, error } = await supabase
+      .from("tasks")
+      .insert({
+        title,
+        description,
+        assigned_to,
+        created_by: session.user.id,
+      })
+      .select() // <--- CRITICAL: Add this to get the created task back!
+      .single();
     if (error) return thunkAPI.rejectWithValue(error.message);
 
     return data;
@@ -23,16 +26,33 @@ export const createTask = createAsyncThunk(
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
   async (_, thunkAPI) => {
+    // 1. Get the current session
     const {
       data: { session },
     } = await supabase.auth.getSession();
+    if (!session) return thunkAPI.rejectWithValue("No session found");
 
-    const { data, error } = await supabase
-      .from("tasks")
-      .select("*")
-      .eq("assigned_to", session.user.id);
+    // 2. Fetch the user's role from your 'profiles' table
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", session.user.id)
+      .single();
+
+    // 3. Start building the query
+    let query = supabase.from("tasks").select("*");
+
+    // 4. If NOT an admin, apply the "assigned_to" filter
+    if (profile?.role !== "admin") {
+      query = query.eq("assigned_to", session.user.id);
+    }
+
+    // 5. Execute the query
+    const { data, error } = await query;
+
     if (error) return thunkAPI.rejectWithValue(error.message);
 
+    console.log("Admin or User data:", data);
     return data;
   },
 );

@@ -1,6 +1,6 @@
-import AdminCreateTask from "./AdminCreateTask";
 import AdminShowUsers from "./AdminShowUsers";
 import AdminStats from "../components/AdminStats";
+import AdminAllTasks from "../components/AdminAllTasks";
 
 export default function AdminPage() {
   return (
@@ -9,7 +9,7 @@ export default function AdminPage() {
         <AdminStats />
         <AdminShowUsers />
       </div>
-      <AdminCreateTask />
+      <AdminAllTasks />
     </div>
   );
 }

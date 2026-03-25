@@ -10,6 +10,7 @@ import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/AdminPage";
 import AdminCreateTask from "./pages/AdminCreateTask";
 import AdminShowUsers from "./pages/AdminShowUsers";
+import AdminAllTasks from "./components/AdminAllTasks";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ function App() {
         <Route index element={<AdminDashboard />} />
         <Route path="create" element={<AdminCreateTask />} />
         <Route path="list" element={<AdminShowUsers />} />
+        <Route path="tasks" element={<AdminAllTasks />} />
       </Route>
     </Routes>
   );
