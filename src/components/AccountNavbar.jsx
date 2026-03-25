@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../features/auth/authSlice";
 
 export default function AccountNavbar() {
@@ -17,6 +17,20 @@ export default function AccountNavbar() {
   return (
     <div className="w-full relative bg-white shadow-md px-6 py-4 flex justify-between items-center mb-10">
       <h1 className="text-xl font-bold text-gray-800">Task Manager</h1>
+
+      {role === "admin" && (
+        <div className="flex gap-2">
+          <Link to="/admin" className=" hover:underline">
+            Dashboard
+          </Link>
+          <Link to="/admin/list" className=" hover:underline">
+            User List
+          </Link>
+          <Link to="/admin/create" className=" hover:underline">
+            Create Task
+          </Link>
+        </div>
+      )}
 
       <div className="flex items-center gap-4">
         <div

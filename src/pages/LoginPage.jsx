@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Import this from react-router-dom
 
-  const { role, error } = useSelector((state) => state.auth);
+  const { user, role, error } = useSelector((state) => state.auth);
 
   // login
   const handleLogin = async (e) => {
@@ -21,12 +22,29 @@ export default function Login() {
       console.log("working", result.payload);
 
       if (role === "admin") navigate("/admin");
-      else navigate("/employee");
+      else if (role === "employee") navigate("/employee");
     } else {
       console.log("not working");
     }
   };
 
+  useEffect(() => {
+    console.log("!!!!!!!!!!!!", user?.email, location.pathname, role);
+
+    if (!user) return; // only redirect logged-in users from login page
+    if (location.pathname === "/") {
+      console.log("im in logi n /");
+
+      if (role === "admin") navigate("/admin");
+      else if (role === "employee") {
+        console.log("em........ ,", role);
+
+        navigate("/employee");
+      }
+    } else {
+      console.log("nopeee");
+    }
+  }, [role, user, location.pathname]);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form
