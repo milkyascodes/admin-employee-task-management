@@ -17,8 +17,13 @@ export default function Login() {
     console.log({ email, password });
     const result = await dispatch(loginUser({ email, password }));
     if (result.meta.requestStatus === "fulfilled") {
+      const role = result.payload.role;
+      console.log("working", result.payload);
+
       if (role === "admin") navigate("/admin");
       else navigate("/employee");
+    } else {
+      console.log("not working");
     }
   };
 

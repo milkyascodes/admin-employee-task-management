@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import supabase from "../../supabaseClient";
+import { data } from "autoprefixer";
 
 // functions
 
@@ -45,12 +46,7 @@ export const loginUser = createAsyncThunk(
       .eq("id", data.user.id)
       .maybeSingle();
 
-    console.log("profile:", profile);
-    console.log("role:", profile?.role);
-    console.log("profile>>>>>>", data.user);
-
     if (!profile) {
-      console.log("null>>>>>>", data.user);
       // fallback: create profile if missing
       await supabase.from("profiles").insert([
         {
@@ -67,7 +63,7 @@ export const loginUser = createAsyncThunk(
     }
     console.log("user", data.user);
 
-    return { user: data.user, role: profile.role };
+    return { user: data.user, role: profile?.role || "employee" };
   },
 );
 
@@ -81,14 +77,17 @@ export const getCurrentUser = createAsyncThunk(
   async (_, thunkAPI) => {
     const {
       data: { session },
+      error: sessionError,
     } = await supabase.auth.getSession();
 
-    if (!session) return null;
+    if (!session?.user) {
+      console.log("No user logged in");
+      return;
+    }
 
     const user = session.user;
 
-    // fetch role from profiles
-    const { data: profile } = await supabase
+    const { data: profile, error } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", user.id)
@@ -96,7 +95,7 @@ export const getCurrentUser = createAsyncThunk(
 
     return {
       user,
-      role: profile?.role || "employee",
+      role: profile?.role,
     };
   },
 );

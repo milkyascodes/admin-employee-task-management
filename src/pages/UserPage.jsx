@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function UserPage() {
   const { user, role } = useSelector((state) => state.auth);
-  console.log("user", user, role);
+  // console.log("user", user, role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = (e) => {
